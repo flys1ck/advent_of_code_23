@@ -1,8 +1,8 @@
-pub fn part_one(input: &str) -> u32 {
+pub fn part_one(_input: &str) -> u32 {
     return 0;
 }
 
-pub fn part_two(input: &str) -> u32 {
+pub fn part_two(_input: &str) -> u32 {
     return 0;
 }
 
