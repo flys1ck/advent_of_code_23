@@ -19,21 +19,33 @@ pub fn part_two(input: &str) -> u32 {
     input
         .lines()
         .map(|line| {
-            let zeros = get_match_tuple(line, "zero", 0);
-            let ones = get_match_tuple(line, "one", 1);
-            let twos = get_match_tuple(line, "two", 2);
-            let threes = get_match_tuple(line, "three", 3);
-            let fours = get_match_tuple(line, "four", 4);
-            let fives = get_match_tuple(line, "five", 5);
-            let sixes = get_match_tuple(line, "six", 6);
-            let sevens = get_match_tuple(line, "seven", 7);
-            let eights = get_match_tuple(line, "eight", 8);
-            let nines = get_match_tuple(line, "nine", 9);
+            // written digits
+            let zeros = get_written_digit_matches(line, "zero", 0);
+            let ones = get_written_digit_matches(line, "one", 1);
+            let twos = get_written_digit_matches(line, "two", 2);
+            let threes = get_written_digit_matches(line, "three", 3);
+            let fours = get_written_digit_matches(line, "four", 4);
+            let fives = get_written_digit_matches(line, "five", 5);
+            let sixes = get_written_digit_matches(line, "six", 6);
+            let sevens = get_written_digit_matches(line, "seven", 7);
+            let eights = get_written_digit_matches(line, "eight", 8);
+            let nines = get_written_digit_matches(line, "nine", 9);
+
+            // regular digits
+            let digits = line
+                .chars()
+                .enumerate()
+                .filter_map(|(index, char)| match char.to_digit(10) {
+                    Some(digit) => Some((index, digit)),
+                    None => None,
+                })
+                .collect();
 
             let mut all = [
-                zeros, ones, twos, threes, fours, fives, sixes, sevens, eights, nines,
+                zeros, ones, twos, threes, fours, fives, sixes, sevens, eights, nines, digits,
             ]
             .concat();
+
             all.sort_by(|a, b| a.0.cmp(&b.0));
 
             let first = all.first();
@@ -46,27 +58,12 @@ pub fn part_two(input: &str) -> u32 {
         .sum()
 }
 
-fn get_match_tuple(line: &str, pattern: &str, digit: u32) -> Vec<(usize, u32)> {
+fn get_written_digit_matches(line: &str, pattern: &str, digit: u32) -> Vec<(usize, u32)> {
     let mut matches = HashMap::new();
     line.match_indices(pattern).for_each(|(index, _)| {
         matches.insert(index, digit);
         ()
     });
-    line.rmatch_indices(pattern).for_each(|(index, _)| {
-        matches.insert(index, digit);
-        ()
-    });
-    line.chars()
-        .enumerate()
-        .filter_map(|(index, char)| match char.to_digit(10) {
-            Some(digit) => Some((index, digit)),
-            None => None,
-        })
-        .filter(|(_index, d)| *d == digit)
-        .for_each(|(index, _d)| {
-            matches.insert(index, digit);
-            ()
-        });
 
     matches.into_iter().collect()
 }
