@@ -1,10 +1,10 @@
 mod days;
 
-use days::{day01, day02};
+use days::{day01, day02, day03};
 use std::{fs, time::Instant};
 
 fn main() {
-    const DAY: &str = "02";
+    const DAY: &str = "03";
     run_day(DAY)
 }
 
@@ -30,6 +30,7 @@ fn get_day_parts(day: &str) -> (fn(&str) -> u32, fn(&str) -> u32) {
     match day {
         "01" => (day01::part_one, day01::part_two),
         "02" => (day02::part_one, day02::part_two),
+        "03" => (day03::part_one, day03::part_two),
         _ => unimplemented!(),
     }
 }
